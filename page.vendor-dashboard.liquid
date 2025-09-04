@@ -1,0 +1,53 @@
+{% comment %} Vendor Dashboard (Cloudinary uploads) {% endcomment %}
+{% if customer %}
+<section class="page-width">
+  <h1>My Works</h1>
+  <form id="workForm" class="form">
+    <div class="grid">
+      <div class="field"><label>Title</label><input type="text" name="title" required></div>
+      <div class="field"><label>Price</label><input type="number" name="price" step="0.01" required></div>
+      <div class="field"><label>Medium</label><input type="text" name="medium" placeholder="e.g. Oil on canvas"></div>
+      <div class="field"><label>Dimensions</label><input type="text" name="dimensions" placeholder="e.g. 30×40 cm"></div>
+      <div class="field"><label>Year</label><input type="text" name="year" placeholder="e.g. 2024"></div>
+    </div>
+    <div class="field"><label>Description</label><textarea name="description" rows="5"></textarea></div>
+    <div class="field">
+      <label>Upload images/files (up to 5)</label>
+      <input type="file" id="files" accept="image/*,application/pdf" multiple>
+      <small>You can attach images or PDFs. Max 5 files.</small>
+      <ul id="fileList"></ul>
+    </div>
+    <button type="submit">Submit</button>
+    <p id="status" style="margin-top:10px;"></p>
+  </form>
+
+  <hr style="margin:32px 0">
+  <h2>My Orders</h2>
+  <div id="orders"></div>
+</section>
+
+<style>
+  .page-width{max-width:900px;margin:0 auto;padding:24px}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .field{margin-bottom:14px}
+  label{display:block;margin-bottom:6px;font-weight:600}
+  input,textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px}
+  button{padding:10px 16px;border:0;background:#111;color:#fff;border-radius:10px;cursor:pointer}
+  #fileList{list-style:none;padding-left:0;margin-top:8px}
+  #fileList li{font-size:14px;margin-bottom:4px}
+  table{width:100%;border-collapse:collapse}
+  th,td{border-bottom:1px solid #eee;padding:8px;text-align:left}
+</style>
+
+<script>
+  window.vendorPortalConfig = {
+    vendorId: {{ customer.id }},
+    appProxyPath: '/apps/{{ settings.vendor_portal_subpath | default: "vendor-portal" }}'
+  };
+</script>
+<script src="{{ 'vendor-dashboard.js' | asset_url }}" defer></script>
+{% else %}
+  <div class="page-width">
+    <p>You need to <a href="/account/login">log in</a> to access the vendor dashboard.</p>
+  </div>
+{% endif %}
